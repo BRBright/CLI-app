@@ -1,4 +1,5 @@
 var mysql = require("mysql");
+var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -16,27 +17,43 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) throw err;
-  console.log("connected as id " + connection.threadId + "\n");
-  readProducts();
+  //console.log("connected as id " + connection.threadId + "\n");
 });
 
-function readProducts() {
-  console.log("Selecting all products...\n");
-  connection.query("SELECT * FROM products", function(err, res) {
-    if (err) throw err;
-    for (var i = 0; i < res.length; i++) {
-      console.log(
-        res[i].id +
-          ") " +
-          res[i].product_name +
-          " | " +
-          res[i].department_name +
-          " | " +
-          res[i].price +
-          " | " +
-          res[i].stock_quantity
-      );
+inquirer
+  .prompt([
+    {
+      type: "input",
+      name: "userItem",
+      message: "What is the ID number of the item you are looking for?"
+    },
+    {
+      type: "input",
+      name: "userQuantity",
+      message: "How many would you like?"
     }
-    connection.end();
+  ])
+  .then(function(user) {
+    console.log("Selecting product...\n");
+    let itemQuery = user.userItem;
+    connection.query("SELECT * FROM products WHERE id=?", [itemQuery], function(
+      err,
+      res
+    ) {
+      if (err) throw err;
+      for (var i = 0; i < res.length; i++) {
+        console.log(
+          res[i].id +
+            ") " +
+            res[i].product_name +
+            " | " +
+            res[i].department_name +
+            " | " +
+            res[i].price +
+            " | " +
+            res[i].stock_quantity
+        );
+      }
+      connection.end();
+    });
   });
-}
