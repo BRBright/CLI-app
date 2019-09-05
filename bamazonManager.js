@@ -69,6 +69,34 @@ function runSearch() {
           res[i].stock_quantity
       );
     }
+    console.log("-----------------------------------------");
+    runSearch();
+  });
+}
+
+function viewLowInventory() {
+  console.log("Finding low inventory products...\n");
+
+  connection.query("SELECT * FROM products", function(err, res) {
+    if (err) throw err;
+
+    for (var i = 0; i < res.length; i++) {
+      if (res[i].stock_quantity <= 5) {
+        console.log(
+          res[i].id +
+            ") " +
+            res[i].product_name +
+            " | " +
+            res[i].department_name +
+            " | " +
+            res[i].price +
+            " | " +
+            res[i].stock_quantity
+        );
+      }
+    }
+    console.log("-----------------------------------------");
+    startEnd();
   });
 }
 
@@ -101,8 +129,9 @@ function addInventory() {
         function(err, res) {
           if (err) throw err;
           console.log(res.affectedRows + " Product updated!\n");
+          console.log("-----------------------------------------");
         }
       );
-      connection.end();
+      startEnd();
     });
 }
