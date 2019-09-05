@@ -81,7 +81,6 @@ function runSearch() {
             }
           }
           startEnd();
-          connection.end();
         }
       );
     });
