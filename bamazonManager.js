@@ -70,7 +70,7 @@ function runSearch() {
       );
     }
     console.log("-----------------------------------------");
-    runSearch();
+    startEnd();
   });
 }
 
@@ -130,8 +130,8 @@ function addInventory() {
           if (err) throw err;
           console.log(res.affectedRows + " Product updated!\n");
           console.log("-----------------------------------------");
+          startEnd();
         }
       );
-      startEnd();
     });
 }
